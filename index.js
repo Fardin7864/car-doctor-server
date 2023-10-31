@@ -105,15 +105,17 @@ async function run() {
     //cart
     const cartColl = client.db('car-doctor').collection('cart');
 
-    app.get('/cart/:email',verifyToken,async (req, res ) => { 
+    app.get('/cart/:email', verifyToken, async (req, res) => {
       const email = req.params.email;
-      const query = {email: email}
-      if (req.query.email !== req.user.emial) {
-        return res.status(403).send({message: 'forbidden access'})
+      const query = { email: email };
+      console.log(email, req.user.email); // Fixed the typo here
+      if (email !== req.user.email) {
+        return res.status(403).send({ message: 'forbidden access' });
       }
       const result = await cartColl.find(query).toArray();
       res.send(result);
-     })
+    });
+    
   
   app.get('/cart',async (req, res ) => { 
     const result = await cartColl.find().toArray();
